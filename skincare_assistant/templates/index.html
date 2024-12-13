@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skincare Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            text-align: center;
+            background-color: #0d6efd;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .card {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            border-radius: 5px;
+            font-size: 1.1em;
+            resize: none;
+        }
+        button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+        }
+        .response-card {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .routine-card {
+            background-color: #fefefe;
+            border-left: 5px solid #0d6efd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .typing-indicator {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+		.typing-indicator img {
+            width: 60px;
+            height: 60px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personalized Skincare Assistant</h1>
+        <div class="card p-4">
+            <form id="skincareForm" action="/" method="POST">
+                <div class="mb-3">
+                    <label for="prompt" class="form-label"><strong>Enter your prompt:</strong></label>
+                    <textarea class="form-control" id="prompt" name="prompt" rows="5" placeholder="Type your prompt here..." required>{{ prompt }}</textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Get Recommendation</button>
+                    <button type="button" id="clearButton" class="btn btn-secondary">Clear</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="typing-indicator">
+            <img src="/static/typing_bubble.gif" alt="Typing...">
+            <p>Generating your personalized routine...</p>
+        </div>
+
+        {% if general_advice %}
+        <div class="response-card">
+            <h5>General Advice:</h5>
+            {{ general_advice | safe }}
+        </div>
+        {% endif %}
+
+        {% if morning_routine %}
+        <div class="routine-card">
+            <h5>Morning Routine:</h5>
+            {{ morning_routine | safe }}
+        </div>
+        {% endif %}
+
+        {% if night_routine %}
+        <div class="routine-card">
+            <h5>Night Routine:</h5>
+            {{ night_routine | safe }}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById("clearButton").addEventListener("click", function () {
+            document.getElementById("prompt").value = "";
+            const responses = document.querySelectorAll(".response-card, .routine-card");
+            responses.forEach(response => response.remove());
+        });
+
+        const form = document.getElementById("skincareForm");
+        form.addEventListener("submit", function () {
+            document.querySelector(".typing-indicator").style.display = "block";
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
